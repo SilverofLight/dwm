@@ -1198,8 +1198,8 @@ manage(Window w, XWindowAttributes *wa)
 	}else if(!strcmp(c->name, "wudao")) {
 		c->mon->tagset[c->mon->seltags] |= c->tags = scratchtag;
 		c->isfloating = True;
-		c->x = c->mon->wx + (c->mon->ww - WIDTH(c));
-		c->y = c->mon->wy;
+		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) - gappov;
+		c->y = c->mon->wy + gappoh;
   }
 
 	wc.border_width = c->bw;
