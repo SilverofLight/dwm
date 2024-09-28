@@ -38,6 +38,8 @@ static const unsigned int alphas[][3]      = {
 
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
+
+static const char wudaoname[] = "wudao";
 static const char *wudao[] = { "st", "-t", "wudao", "-g", "60x24", "-e", "zsh", "-c", "wd -i; exec sh", NULL };
 
 /* tagging */
@@ -102,7 +104,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_s,      togglescratch,  {.v = scratchpadcmd } },
-	{ MODKEY,                       XK_w,      togglescratch,  {.v = wudao } },
+	{ MODKEY,                       XK_w,      togglewudao,  {.v = wudao } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },

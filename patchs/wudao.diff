@@ -1,0 +1,98 @@
+diff --git a/config.def.h b/config.def.h
+index a57d812..6624469 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -38,6 +38,8 @@ static const unsigned int alphas[][3]      = {
+ 
+ static const char scratchpadname[] = "scratchpad";
+ static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", NULL };
++
++static const char wudaoname[] = "wudao";
+ static const char *wudao[] = { "st", "-t", "wudao", "-g", "60x24", "-e", "zsh", "-c", "wd -i; exec sh", NULL };
+ 
+ /* tagging */
+@@ -102,7 +104,7 @@ static const Key keys[] = {
+ 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
+ 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+ 	{ MODKEY,                       XK_s,      togglescratch,  {.v = scratchpadcmd } },
+-	{ MODKEY,                       XK_w,      togglescratch,  {.v = wudao } },
++	{ MODKEY,                       XK_w,      togglewudao,  {.v = wudao } },
+ 	{ MODKEY,                       XK_b,      togglebar,      {0} },
+ 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+ 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
+diff --git a/dwm.c b/dwm.c
+index a08ddf6..756a3ef 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -221,6 +221,7 @@ static void tagmon(const Arg *arg);
+ static void togglebar(const Arg *arg);
+ static void togglefloating(const Arg *arg);
+ static void togglescratch(const Arg *arg);
++static void togglewudao(const Arg *arg);
+ static void togglefullscr(const Arg *arg);
+ static void toggletag(const Arg *arg);
+ static void toggleview(const Arg *arg);
+@@ -309,6 +310,7 @@ struct Pertag {
+ };
+ 
+ static unsigned int scratchtag = 1 << LENGTH(tags);
++static unsigned int wudaotag = 1 << (LENGTH(tags) + 1);
+ 
+ /* compile-time check if all tags fit into an unsigned int bit array. */
+ struct NumTags { char limitexceeded[LENGTH(tags) > 31 ? -1 : 1]; };
+@@ -1195,12 +1197,21 @@ manage(Window w, XWindowAttributes *wa)
+ 		c->isfloating = True;
+ 		c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
+ 		c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
+-	}else if(!strcmp(c->name, "wudao")) {
+-		c->mon->tagset[c->mon->seltags] |= c->tags = scratchtag;
++	}
++
++	selmon->tagset[selmon->seltags] &= ~wudaotag;
++	if (!strcmp(c->name, wudaoname)) {
++		c->mon->tagset[c->mon->seltags] |= c->tags = wudaotag;
+ 		c->isfloating = True;
+ 		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) - gappov;
+ 		c->y = c->mon->wy + gappoh;
+-  }
++	}
+ 
+ 	wc.border_width = c->bw;
+ 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
+@@ -1871,6 +1882,7 @@ spawn(const Arg *arg)
+ 	if (arg->v == dmenucmd)
+ 		dmenumon[0] = '0' + selmon->num;
+ 	selmon->tagset[selmon->seltags] &= ~scratchtag;
++	selmon->tagset[selmon->seltags] &= ~wudaotag;
+ 	if (fork() == 0) {
+ 		if (dpy)
+ 			close(ConnectionNumber(dpy));
+@@ -1937,6 +1949,28 @@ togglefullscr(const Arg *arg)
+     setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
+ }
+ 
++void
++togglewudao(const Arg *arg)
++{
++	Client *c;
++	unsigned int found = 0;
++
++	for (c = selmon->clients; c && !(found = c->tags & wudaotag); c = c->next);
++	if (found) {
++		unsigned int newtagset = selmon->tagset[selmon->seltags] ^ wudaotag;
++		if (newtagset) {
++			selmon->tagset[selmon->seltags] = newtagset;
++			focus(NULL);
++			arrange(selmon);
++		}
++		if (ISVISIBLE(c)) {
++			focus(c);
++			restack(selmon);
++		}
++	} else
++		spawn(arg);
++}
++
+ void
+ togglescratch(const Arg *arg)
+ {
