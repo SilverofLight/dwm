@@ -45,6 +45,9 @@ static const char *wudao[] = { "st", "-t", "wudao", "-g", "60x24", "-e", "zsh", 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
+/* Lockfile */
+static char lockfile[] = "/tmp/dwm.lock";
+
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
