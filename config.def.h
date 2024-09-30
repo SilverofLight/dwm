@@ -150,7 +150,8 @@ static const Key keys[] = {
   { MODKEY|ShiftMask,             XK_p,      spawn,          SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0%- && wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- && ~/.dwm/reflashBar.sh") },
   { MODKEY,                       XK_o,      spawn,          SHCMD("~/Applications/Obsidian-1.6.7_fbe5be623488d0ecebb94f3b174ba197.AppImage") },
   { MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("brave") },
-  { MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("maim -s ~/Pictures/Screenshots/$(date +%Y-%b-%d--%H-%M-%S_maim | tr A-Z a-z).png") },
+  //{ MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("maim -s ~/Pictures/Screenshots/$(date +%Y-%b-%d--%H-%M-%S_maim | tr A-Z a-z).png") },
+  { MODKEY|ShiftMask,             XK_x,      spawn,          SHCMD("flameshot gui -p ~/Pictures/Screenshots/") },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
