@@ -13,7 +13,7 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const Bool viewontag         = True;     /* Switch view on tag switch */
 static const char *fonts[]          = {
-  "Symbols Nerd Font:sytle=2048-em:size=10",
+  "Symbols Nerd Font:sytle=2048-em:size=11",
   "monospace:size=10",
   "SimSun:size=10",
 };
@@ -45,7 +45,7 @@ static const char wudaoname[] = "wudao";
 static const char *wudao[] = { "st", "-t", "wudao", "-g", "60x24", "-e", "zsh", "-c", "wd -i; exec sh", NULL };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "󰎤", "󰎧", "󰎪", "󰎭", "󰎱", "󰎳", "󰎶", "󰎹", " " };
 
 static const Rule rules[] = {
 	/* xprop(1):
