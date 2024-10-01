@@ -40,7 +40,7 @@ date_info=$(date "+%Y-%m-%d $Week %H:%M:%S")
 # date_info=$(date "+%m-%d %H:%M")
 
 #获取音量
-vol=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | cut -d'.' -f2) 
+vol=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | cut -d'.' -f2) 
 
 Vol=""
 if [ $vol -ge 50 ]
@@ -53,5 +53,58 @@ else
   Vol=" "
 fi
 
+MAC=$(bluetoothctl devices | grep -i Baseus | awk '{print $2}' | head -n 1)
+Blue_bat=$(bluetoothctl info "$MAC" | grep Battery | awk '{print $4}' | tr -d '()')
+if_con=$(bluetoothctl info "$MAC" | grep Connected | awk '{print $2}')
+
+Blue_icon=""
+if [ "$if_con" = "yes" ]; then
+  case $Blue_bat in
+    100)
+      Blue_icon="󰥈 "
+      ;;
+    90)
+      Blue_icon="󰥆 "
+      ;;
+    80)
+      Blue_icon="󰥅 "
+      ;;
+    70)
+      Blue_icon="󰥄 "
+      ;;
+    60)
+      Blue_icon="󰥃 "
+      ;;
+    50)
+      Blue_icon="󰥂 "
+      ;;
+    40)
+      Blue_icon="󰥁 "
+      ;;
+    30)
+      Blue_icon="󰥀 "
+      ;;
+    20)
+      Blue_icon="󰤿 "
+      ;;
+    10)
+      Blue_icon="󰤾 "
+      ;;
+    esac
+else
+  Blue_icon=""
+fi
+
+# 判断网络状态
+Net_status=""
+Curl=$(curl -s --connect-timeout 2 --head http://www.baidu.com | head -n 1 | grep "HTTP/1"|awk '{print $2}')
+
+if [ $Curl -eq 200 ]
+then
+  Net_status=" 󰌘"
+else
+  Net_status=" 󰌙"
+fi
+
 # 将信息输出到状态栏
-xsetroot -name "/ $storage |  $cpu |  $mem |  $battery% | $Vol$vol% |  $wifi | $date_info"
+xsetroot -name "/ $storage |  $cpu |  $mem |  $battery% | $Blue_icon$Vol$vol% |  $wifi$Net_status | $date_info"
