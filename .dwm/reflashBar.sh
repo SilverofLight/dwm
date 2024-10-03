@@ -1,45 +1,14 @@
 #!/bin/bash
-w=$(date "+%w")
 
-Week=""
-case $w in
-  0) # Sunday
-    Week="Sun"
-    ;;
-  1) # Monday
-    Week="Mon"
-    ;;
-  2) # Tuesday
-    Week="Tue"
-    ;;
-  3) # Wednesday
-    Week="Wed"
-    ;;
-  4) # Thursday
-    Week="Thu"
-    ;;
-  5) # Friday
-    Week="Fri"
-    ;;
-  6) # Saturday
-    Week="Sat"
-    ;;
-esac
-# cpu
-cpu=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}')
-# Mem
-mem=$(free -h | grep "内存：" | awk '{printf "%.0f%%\n", $3/$2*100}')
-# stroge
-storage=$(df / | awk 'NR==2 {print $5}')
-# 获取电量
-battery=$(acpi -b | grep -P -o '[0-9]+(?=%)')
-# 获取 WiFi 信息
-wifi=$(nmcli -t -f active,ssid dev wifi | grep '是' | cut -d':' -f2 | awk '{print $1}')
-# 获取当前日期
-date_info=$(date "+%Y-%m-%d $Week %H:%M:%S")
-# date_info=$(date "+%m-%d %H:%M")
+temp_date="$HOME/.dwm/tmp/date"
+temp_mem="$HOME/.dwm/tmp/mem"
+temp_storage="$HOME/.dwm/tmp/storage"
+temp_battery="$HOME/.dwm/tmp/battery"
+temp_wifi="$HOME/.dwm/tmp/wifi"
+temp_cpu="$HOME/.dwm/tmp/cpu"
+temp_vol="$HOME/.dwm/tmp/vol"
 
-#获取音量
+# vol
 vol=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | cut -d'.' -f2) 
 
 Vol=""
@@ -52,7 +21,6 @@ then
 else
   Vol=" "
 fi
-
 MAC=$(bluetoothctl devices | grep -i Baseus | awk '{print $2}' | head -n 1)
 Blue_bat=$(bluetoothctl info "$MAC" | grep Battery | awk '{print $4}' | tr -d '()')
 if_con=$(bluetoothctl info "$MAC" | grep Connected | awk '{print $2}')
@@ -94,17 +62,27 @@ if [ "$if_con" = "yes" ]; then
 else
   Blue_icon=""
 fi
+echo "$Blue_icon$Vol$vol" > "$temp_vol"
 
-# 判断网络状态
-Net_status=""
-Curl=$(curl -s --connect-timeout 2 --head http://www.baidu.com | head -n 1 | grep "HTTP/1"|awk '{print $2}')
-
-if [ $Curl -eq 200 ]
-then
-  Net_status=" 󰌘"
-else
-  Net_status=" 󰌙"
+if [[ -f "$temp_date" ]]; then
+  date=$(cat $temp_date)
 fi
-
-# 将信息输出到状态栏
-xsetroot -name "/ $storage |  $cpu |  $mem |  $battery% | $Blue_icon$Vol$vol% |  $wifi$Net_status | $date_info"
+if [[ -f "$temp_cpu" ]]; then
+  cpu=$(cat $temp_cpu)
+fi
+if [[ -f "$temp_mem" ]]; then
+  mem=$(cat $temp_mem)
+fi
+if [[ -f "$temp_storage" ]]; then
+  storage=$(cat $temp_storage)
+fi
+if [[ -f "$temp_battery" ]]; then
+  battery=$(cat $temp_battery)
+fi
+if [[ -f "$temp_wifi" ]]; then
+  vol=$(cat $temp_vol)
+fi
+if [[ -f "$temp_vol" ]]; then
+  wifi=$(cat $temp_wifi)
+fi
+xsetroot -name "/ $storage |  $cpu |  $mem |  $battery% | $vol% |  $wifi | $date"
