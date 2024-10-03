@@ -253,6 +253,7 @@ static void zoom(const Arg *arg);
 static void keyrelease(XEvent *e);
 static void combotag(const Arg *arg);
 static void comboview(const Arg *arg);
+void toggle_layout(const Arg *arg);
 
 
 /* variables */
@@ -1761,6 +1762,18 @@ setlayout(const Arg *arg)
 		arrange(selmon);
 	else
 		drawbar(selmon);
+}
+
+void toggle_layout(const Arg *arg) {
+    Arg a;
+
+    // 切换布局
+    if (selmon->sellt == 0)
+        a.v = &layouts[1];
+    else
+        a.v = &layouts[0];
+
+    setlayout(&a);
 }
 
 /* arg > 1.0 will set mfact absolutely */

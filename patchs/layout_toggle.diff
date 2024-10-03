@@ -1,0 +1,50 @@
+diff --git a/config.def.h b/config.def.h
+index bc114fc..082e4bd 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -135,11 +135,12 @@ static const Key keys[] = {
+ 	{ MODKEY,                       XK_Tab,    view,           {0} },
+ 	{ MODKEY|ShiftMask,             XK_q,      killclient,     {0} },
+ 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
+-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
++	// { MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
++	{ MODKEY,                       XK_f,      toggle_layout,  {0} },
+ 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+ // 	{ MODKEY,                       XK_e,      setlayout,      {0} },
+ 	{ MODKEY,                       XK_space,  togglefloating, {0} },
+-	{ MODKEY|ShiftMask,                       XK_f,      togglefullscr,  {0} },
++	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
+ 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+ 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
+ 	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
+diff --git a/dwm.c b/dwm.c
+index 9987711..eab03f9 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -253,6 +253,7 @@ static void zoom(const Arg *arg);
+ static void keyrelease(XEvent *e);
+ static void combotag(const Arg *arg);
+ static void comboview(const Arg *arg);
++void toggle_layout(const Arg *arg);
+ 
+ 
+ /* variables */
+@@ -1763,6 +1764,18 @@ setlayout(const Arg *arg)
+ 		drawbar(selmon);
+ }
+ 
++void toggle_layout(const Arg *arg) {
++    Arg a;
++
++    // 切换布局
++    if (selmon->sellt == 0)
++        a.v = &layouts[1];
++    else
++        a.v = &layouts[0];
++
++    setlayout(&a);
++}
++
+ /* arg > 1.0 will set mfact absolutely */
+ void
+ setmfact(const Arg *arg)
