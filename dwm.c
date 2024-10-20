@@ -1203,6 +1203,7 @@ manage(Window w, XWindowAttributes *wa)
 	if (!strcmp(c->name, scratchpadname)) {
 		c->mon->tagset[c->mon->seltags] |= c->tags = scratchtag;
 		c->isfloating = True;
+        c->w = c->w * 1.5;
 		c->x = c->mon->wx + (c->mon->ww / 2 - WIDTH(c) / 2);
 		c->y = c->mon->wy + (c->mon->wh / 2 - HEIGHT(c) / 2);
 	}
@@ -1217,6 +1218,8 @@ manage(Window w, XWindowAttributes *wa)
 	if (!strcmp(c->name, wudaoname)) {
 		c->mon->tagset[c->mon->seltags] |= c->tags = wudaotag;
 		c->isfloating = True;
+        c->h = c->h / 1.6;
+        c->w = c->w / 1.5;
 		c->x = c->mon->wx + (c->mon->ww - WIDTH(c)) - gappov;
 		c->y = c->mon->wy + gappoh;
 	}
