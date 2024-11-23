@@ -45,7 +45,7 @@ static const char wudaoname[] = "wudao";
 static const char *wudao[] = { "alacritty", "-T", "wudao", "-e", "zsh", "-c", "wd -i; exec sh", NULL };
 
 /* tagging */
-static const char *tags[] = { "󰎤", "󰎧", "󰎪", "󰎭", "󰎱", "󰎳", "󰎶", "󰎹", " " };
+static const char *tags[] = { "󰎤", "󰎧", "󰎪", "󰎭", "󰎱", "󰎳", "󰎶", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -53,7 +53,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+	{ "Gimp",     NULL,       NULL,       0,            0,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
@@ -141,7 +141,7 @@ static const Key keys[] = {
 // 	{ MODKEY,                       XK_e,      setlayout,      {0} },
 	{ MODKEY,                       XK_space,  togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+	// { MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_h,      focusmon,       {.i = -1 } },
 	{ MODKEY,                       XK_l,      focusmon,       {.i = +1 } },
