@@ -10,6 +10,10 @@ temp_cpu="$HOME/.dwm/tmp/cpu"
 temp_vol="$HOME/.dwm/tmp/vol"
 
 
+# 考研倒计时
+today=$(date "+%d")
+thisMon=`expr 30 - $today + 21`
+
 # date
 while true; do
   w=$(date "+%w")
@@ -63,12 +67,12 @@ while true; do
   Vol=""
   if [ $vol -ge 50 ]
   then
-    Vol=" "
+    Vol="^b#cc6666^^c#11111b^  "
   elif [ $vol -eq 0 ]
   then
-    Vol=" "
+    Vol="^b#cc6666^^c#11111b^  "
   else
-    Vol=" "
+    Vol="^b#cc6666^^c#11111b^  "
   fi
   MAC=$(bluetoothctl devices | grep -i Baseus | awk '{print $2}' | head -n 1)
   Blue_bat=$(bluetoothctl info "$MAC" | grep Battery | awk '{print $4}' | tr -d '()')
@@ -78,46 +82,46 @@ while true; do
   if [ "$if_con" = "yes" ]; then
     case $Blue_bat in
       100)
-        Blue_icon="󰥈 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰥈 "
         ;;
       90)
-        Blue_icon="󰥆 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰥆 "
         ;;
       80)
-        Blue_icon="󰥅 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰥅 "
         ;;
       70)
-        Blue_icon="󰥄 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰥄 "
         ;;
       60)
-        Blue_icon="󰥃 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰥃 "
         ;;
       50)
-        Blue_icon="󰥂 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰥂 "
         ;;
       40)
-        Blue_icon="󰥁 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰥁 "
         ;;
       30)
-        Blue_icon="󰥀 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰥀 "
         ;;
       20)
-        Blue_icon="󰤿 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰤿 "
         ;;
       10)
-        Blue_icon="󰤾 "
+        Blue_icon="^b#b87694^^c#11111b^ 󰤾 "
         ;;
       esac
   else
     Blue_icon=""
   fi
-  echo "$Blue_icon$Vol$vol" > "$temp_vol"
+  echo "$Blue_icon$Vol^c#cc6666^^b#1e1e2e^ $vol" > "$temp_vol"
   sleep 10
 done &
 
 # mem
 while true; do
-  mem=$(free -h | grep "内存：" | awk '{printf "%.0f%%\n", $3/$2*100}')
+  mem=$(LC_ALL=C free | grep "Mem" | awk '{printf "%.0f%%\n", $3/$2*100}')
   echo "$mem" > "$temp_mem"
   sleep 5
 done &
@@ -131,7 +135,7 @@ done &
 
 # wifi
 while true; do
-  wifi=$(nmcli -t -f active,ssid dev wifi | grep '是' | cut -d':' -f2 | awk '{print $1}')
+  wifi=$(LC_ALL=C nmcli -t -f active,ssid dev wifi | grep 'yes' | cut -d':' -f2 | awk '{print $1}')
   Net_status=""
   Curl=$(curl -s --connect-timeout 2 --head http://www.baidu.com | head -n 1 | grep "HTTP/1"|awk '{print $2}')
   if [ $Curl -eq 200 ]
@@ -168,6 +172,7 @@ while true; do
   if [[ -f "$temp_vol" ]]; then
     wifi=$(cat $temp_wifi)
   fi
-  xsetroot -name "/ $storage |  $cpu |  $mem |  $battery% | $vol% |  $wifi | $date"
+  # xsetroot -name "考研还剩：$thisMon | / $storage |  $cpu |  $mem |  $battery% | $vol% |  $wifi | $date"
+  xsetroot -name "^b#ff91af^^c#11111b^考研还剩：$thisMon ^c#11111b^^b#a6e3a1^ / ^b#1e1e2e^^c#a6e3a1^ $storage ^b#94e2d5^^c#11111b^  ^c#94e2d5^^b#1e1e2e^ $cpu ^c#11111b^^b#f9e2af^  ^c#f9e2af^^b#1e1e2e^ $mem ^b#89b4fa^^c#11111b^  ^b#1e1e2e^^c#89b4fa^ $battery% $vol% ^#b#49d980^^c#11111b^  ^c#49d980^^b#1e1e2e^ $wifi ^c#f0e0e6^^b#1e1e2e^ $date"
   sleep 1
 done &
