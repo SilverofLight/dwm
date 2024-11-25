@@ -24,13 +24,13 @@ static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-// static const char col_cyan[]        = "#cba6f7";
-static const char col_cyan[]        = "#6272a4";
+static const char col_cyan[]        = "#cba6f7";
+static const char col_dra_blue[]    = "#6272a4";
 static const char col_blue[]        = "#89cff0";
 static const char col_orange[]      = "#ffc000";
 static const char *colors[][4]      = {
 	/*               fg         bg         border      float*/
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2, col_blue },
+	[SchemeNorm] = { col_gray3, col_gray1, col_dra_blue, col_blue },
 	[SchemeSel]  = { col_cyan,  col_gray1, col_cyan,  col_cyan  },
 };
 static const unsigned int alphas[][3]      = {
@@ -43,7 +43,8 @@ static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "alacritty", "-T", scratchpadname, NULL };
 
 static const char wudaoname[] = "wudao";
-static const char *wudao[] = { "alacritty", "-T", "wudao", "-e", "zsh", "-c", "wd -i; exec sh", NULL };
+// static const char *wudao[] = { "alacritty", "-T", "wudao", "-e", "zsh", "-c", "wd -i; exec sh", NULL };
+static const char *wudao[] = { "alacritty", "-T", "wudao", "-e", "zsh", "-c", "source ~/.zshrc; wd -i; exec sh", NULL };
 
 /* tagging */
 static const char *tags[] = { "󰎤", "󰎧", "󰎪", "󰎭", "󰎱", "󰎳", "󰎶", "", "" };
